@@ -14,7 +14,7 @@ timezone: 'Asia/Shanghai'
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://gz-hejiehui.github.io
-permalink: :year/:month/:day/:title/
+permalink: posts/:abbrlink.html
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -103,3 +103,8 @@ theme: cards
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# Abbrlink Config
+abbrlink:
+  alg: crc32  # 演算法：crc16(default) and crc32 
+  rep: dec    # 進位制：dec(default) and hex
