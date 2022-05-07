@@ -14,11 +14,11 @@ head:
   
   # 网站图标
   favicon:
-    ico: 
-    small: 
-    medium: 
-    apple_touch_icon: 
-    safari_pinned_tab: 
+    ico: images/favicon/favicon.ico
+    small: images/favicon/favicon-16x16.png
+    medium: images/favicon/favicon-32x32.png
+    apple_touch_icon: images/favicon/apple-touch-icon.png
+    safari_pinned_tab: images/favicon/apple-touch-icon.png
   
   # 社交分享链接
   opengraph: 
@@ -46,7 +46,7 @@ head:
 navbar: 
 
   # 左侧名称显示
-  sitename: Demo
+  sitename: HeJiehui's Blog
   
   # 右侧站内导航链接
   menu: 
@@ -56,10 +56,8 @@ navbar:
       url: /tags/
     - name: 归档
       url: /archives/
-    - name: 友链
-      url: /friends/
-    - name: Page
-      url: /page/
+    - name: 分类
+      url: /categories/
 
   # 导航栏永远显示在屏幕顶端
   # 仅当屏幕宽度不小于 1080 px 时生效
@@ -69,10 +67,10 @@ navbar:
 cover: 
 
   # 显示在最上方 cover 处的站点名称
-  sitename: Demo
+  sitename: HeJieHui's Blog
 
   # 若 avatar 配置不为空，则优先使用 avatar 覆盖 sitename
-  avatar: 
+  avatar: images/favicon/apple-touch-icon.png
   
   # sitename/avatar 下方的一句话介绍
   description: Hi, nice to meet you!
@@ -139,8 +137,8 @@ meta:
   
   # 默认文章作者（可在front-matter中覆盖）
   author:
-    name: ChrAlpha
-    url: https://chralpha.com
+    name: HeJiehui
+    url: https://gz-hejiehui.github.io
   
   # 文章创建日期
   date:
@@ -159,22 +157,22 @@ meta:
 
   # 文章过时提醒
   expire: 
-    enable: false
+    enable: true
     duration: 120  # 超过此天数则显示过期提醒
 
   # 文章自动摘要
   auto_excerpt: 
-    enable: false
+    enable: true
     length: 150
 
   # 文章目录
   toc: 
-    enable: false
+    enable: true
     list_number: false
 
   # 文章版权声明
   copyright: 
-    enable: false
+    enable: true
     
     # 在作者声明和永久链接之后，可以多行，支持 markdown
     custom_text:
@@ -380,9 +378,9 @@ lazyload:
 
 # 站内搜索插件
 search:
-  enable: false
+  enable: true
   path: search.json
-  field: All  # Page | Post | All
+  field: Post  # Page | Post | All
 
 # note 标签插件
 note: false
