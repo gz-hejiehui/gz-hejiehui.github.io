@@ -378,9 +378,9 @@ lazyload:
 
 # 站内搜索插件
 search:
-  enable: false
+  enable: true
   path: search.json
-  field: All  # Page | Post | All
+  field: Post  # Page | Post | All
 
 # note 标签插件
 note: false
