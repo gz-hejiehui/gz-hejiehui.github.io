@@ -162,13 +162,13 @@ meta:
 
   # 文章自动摘要
   auto_excerpt: 
-    enable: true
+    enable: false
     length: 150
 
   # 文章目录
   toc: 
     enable: true
-    list_number: false
+    list_number: true
 
   # 文章版权声明
   copyright: 
@@ -383,7 +383,7 @@ search:
   field: Post  # Page | Post | All
 
 # note 标签插件
-note: false
+note: true
 
 # fold 内容折叠插件
 fold: 
