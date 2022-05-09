@@ -7,4 +7,11 @@ links:
     target: _blank
     backgroundColor: '#fff'
     textColor: '#444'
+
+  - name: 古仔部落格
+    usrl: http://www.kootinlok.com/blog
+    avatar: https://www.kootinlok.com/blog4.0/upload/medium/20220503002305-6131167526.jpeg
+    target: _blank
+    backgroundColor: '#fff'
+    textColor: '#444'
 ---
