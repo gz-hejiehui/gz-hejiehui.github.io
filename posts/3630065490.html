@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon/apple-touch-icon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>国区无法下载 Microsoft Remote Desktop 的解决方法 | HeJiehui&#39;s Blog</title>
+
+
+    <meta name="keywords" content="Microsoft Remote Desktop, 远程桌面">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="前言工作原因需要远程操作 Windows 10，但 AppStore 上的 Microsoft Remote Desktop 却提示地区不支持下载，更换美区 ID 问题依旧。目前找到两个方法可以下载该应用的安装包，记录一下。   第三方网站Microsoft Mac Downloads 网站上有微软 Mac 版的各类软件，甚至连历史版本都有，非常方便。 这里放出最新版（February 7, 20">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国区无法下载 Microsoft Remote Desktop 的解决方法">
+<meta property="og:url" content="https://gz-hejiehui.github.io/posts/3630065490.html">
+<meta property="og:site_name" content="HeJiehui&#39;s Blog">
+<meta property="og:description" content="前言工作原因需要远程操作 Windows 10，但 AppStore 上的 Microsoft Remote Desktop 却提示地区不支持下载，更换美区 ID 问题依旧。目前找到两个方法可以下载该应用的安装包，记录一下。   第三方网站Microsoft Mac Downloads 网站上有微软 Mac 版的各类软件，甚至连历史版本都有，非常方便。 这里放出最新版（February 7, 20">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-11T07:39:32.000Z">
+<meta property="article:modified_time" content="2022-05-11T07:55:09.045Z">
+<meta property="article:author" content="HeJiehui">
+<meta property="article:tag" content="Microsoft Remote Desktop">
+<meta property="article:tag" content="远程桌面">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/default.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/dark.min.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/darkmode.min.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">HeJiehui&#39;s Blog</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        国区无法下载 Microsoft Remote Desktop 的解决方法
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/05/" class="post-meta__date button">2022-05-11</a>
+        
+    <span class="separate-dot"></span><a href="/categories/Mac/" class="button">Mac</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BD%91%E7%AB%99"><span class="toc-number">1.</span> <span class="toc-text">第三方网站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%9C%80%E6%96%B0%E6%B5%8B%E8%AF%95%E7%89%88"><span class="toc-number">2.</span> <span class="toc-text">官方最新测试版</span></a></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BD%91%E7%AB%99"><span class="toc-number">1.</span> <span class="toc-text">第三方网站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%9C%80%E6%96%B0%E6%B5%8B%E8%AF%95%E7%89%88"><span class="toc-number">2.</span> <span class="toc-text">官方最新测试版</span></a></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2022-05-11"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <blockquote class="blockquote-note blockquote-note__info"><div class="blockquote-note__header"><div class="blockquote-note__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></div>前言</div><div class="blockquote-note__content"><p>工作原因需要远程操作 Windows 10，但 AppStore 上的 Microsoft Remote Desktop 却提示地区不支持下载，更换美区 ID 问题依旧。目前找到两个方法可以下载该应用的安装包，记录一下。</p>
+</div></blockquote>
+
+<h2 id="第三方网站"><a href="#第三方网站" class="headerlink" title="第三方网站"></a>第三方网站</h2><p><a target="_blank" rel="noopener" href="https://macadmins.software/">Microsoft Mac Downloads</a> 网站上有微软 Mac 版的各类软件，甚至连历史版本都有，非常方便。</p>
+<p>这里放出最新版（February 7, 2022） Microsoft Remote Desktop 的<a target="_blank" rel="noopener" href="https://go.microsoft.com/fwlink/?linkid=868963">下载直链</a>，可直接点击下载。</p>
+<h2 id="官方最新测试版"><a href="#官方最新测试版" class="headerlink" title="官方最新测试版"></a>官方最新测试版</h2><p>在微软<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-mac">官方文档</a>里搜索「Microsoft Remote Desktop for Mac」，点击进去就是官方预览版的<a target="_blank" rel="noopener" href="https://install.appcenter.ms/orgs/rdmacios-k2vy/apps/microsoft-remote-desktop-for-mac/distribution_groups/all-users-of-microsoft-remote-desktop-for-mac">下载页面</a>，选择最新版本下载即可。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>HeJiehui
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://gz-hejiehui.github.io/posts/3630065490.html">https://gz-hejiehui.github.io/posts/3630065490.html</a>
+        </p>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2022-05-11</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Microsoft-Remote-Desktop/" class="post-tags__link button"># Microsoft Remote Desktop</a><a href="/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/" class="post-tags__link button"># 远程桌面</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/posts/3931055798.html" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            利用 Github Page 部署 Hexo 博客的操作记录
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022 <a href="/">HeJiehui&#39;s Blog</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
