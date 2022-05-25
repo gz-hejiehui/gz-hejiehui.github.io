@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon/apple-touch-icon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>在 NUC11 上安装 ESXi7.0 的流程 | HeJiehui&#39;s Blog</title>
+
+
+    <meta name="keywords" content="NUC, ESXi, VMware">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="虽然说现在的云服务器已经白菜价了，但对于我来说还是习惯在内网放一台测试机。毕竟本地内网的带宽更大，而且做了虚拟化后还能随时创建&#x2F;销毁临时环境。 我用的是一台闲置的 NUC 11（NUC11PAHi5），静音且省电。唯一问题就是官方镜像不支持 NUC11 的网卡，所以我们需要自己打包额外网卡驱动进去，并且打包镜像需要在 Windows 环境下进行。 下载所需文件首先注册一个 VMware">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 NUC11 上安装 ESXi7.0 的流程">
+<meta property="og:url" content="https://gz-hejiehui.github.io/posts/817315956.html">
+<meta property="og:site_name" content="HeJiehui&#39;s Blog">
+<meta property="og:description" content="虽然说现在的云服务器已经白菜价了，但对于我来说还是习惯在内网放一台测试机。毕竟本地内网的带宽更大，而且做了虚拟化后还能随时创建&#x2F;销毁临时环境。 我用的是一台闲置的 NUC 11（NUC11PAHi5），静音且省电。唯一问题就是官方镜像不支持 NUC11 的网卡，所以我们需要自己打包额外网卡驱动进去，并且打包镜像需要在 Windows 环境下进行。 下载所需文件首先注册一个 VMware">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-25T03:50:10.000Z">
+<meta property="article:modified_time" content="2022-05-25T07:42:02.235Z">
+<meta property="article:author" content="HeJiehui">
+<meta property="article:tag" content="NUC">
+<meta property="article:tag" content="ESXi">
+<meta property="article:tag" content="VMware">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/default.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/dark.min.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/darkmode.min.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">HeJiehui&#39;s Blog</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        在 NUC11 上安装 ESXi7.0 的流程
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/05/" class="post-meta__date button">2022-05-25</a>
+        
+    <span class="separate-dot"></span><a href="/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/" class="button">虚拟化</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%89%80%E9%9C%80%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">下载所需文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-VMware-PowerCLI"><span class="toc-number">2.</span> <span class="toc-text">安装 VMware.PowerCLI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="toc-number">3.</span> <span class="toc-text">打包自定义镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%90%AF%E5%8A%A8%E7%9B%98%E5%B9%B6%E5%AE%89%E8%A3%85-ESXi"><span class="toc-number">4.</span> <span class="toc-text">制作启动盘并安装 ESXi</span></a></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%89%80%E9%9C%80%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">下载所需文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-VMware-PowerCLI"><span class="toc-number">2.</span> <span class="toc-text">安装 VMware.PowerCLI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="toc-number">3.</span> <span class="toc-text">打包自定义镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%90%AF%E5%8A%A8%E7%9B%98%E5%B9%B6%E5%AE%89%E8%A3%85-ESXi"><span class="toc-number">4.</span> <span class="toc-text">制作启动盘并安装 ESXi</span></a></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2022-05-25"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>虽然说现在的云服务器已经白菜价了，但对于我来说还是习惯在内网放一台测试机。毕竟本地内网的带宽更大，而且做了虚拟化后还能随时创建&#x2F;销毁临时环境。</p>
+<p>我用的是一台闲置的 NUC 11（NUC11PAHi5），静音且省电。唯一问题就是官方镜像不支持 NUC11 的网卡，所以我们需要自己打包额外网卡驱动进去，并且打包镜像需要在 Windows 环境下进行。</p>
+<h2 id="下载所需文件"><a href="#下载所需文件" class="headerlink" title="下载所需文件"></a>下载所需文件</h2><p>首先注册一个 VMware 的官网账号，打开 <a target="_blank" rel="noopener" href="https://customerconnect.vmware.com/web/vmware/evalcenter?p=free-esxi7">vSphere Hypervisor</a> 产品页面。下载 <code>VMware-ESXi-7.0U3d-19482537-depot.zip</code> 压缩包（注意不是 iso 文件），同时保存产品 License Key（EXSi 是对个人用户免费的）。</p>
+<p>然后下载 <a target="_blank" rel="noopener" href="https://flings.vmware.com/community-networking-driver-for-esxi">Community Networking Driver for ESXi</a> 驱动文件包，这里包含了一些非官方支持的网卡型号驱动文件。最后我们就有了这两个文件：</p>
+<ol>
+<li>VMware-ESXi-7.0U3d-19482537-depot.zip</li>
+<li>Net-Community-Driver_1.2.7.0-1vmw.700.1.0.15843807_19480755.zip</li>
+</ol>
+<h2 id="安装-VMware-PowerCLI"><a href="#安装-VMware-PowerCLI" class="headerlink" title="安装 VMware.PowerCLI"></a>安装 VMware.PowerCLI</h2><p>以管理员权限打开 Powershell（我是 Windows 10 系统），输入一下命令安装 VMware 的工具脚手架：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Install-Module</span> <span class="literal">-Name</span> VMware.PowerCLI</span><br><span class="line">NuGet provider is required to <span class="keyword">continue</span></span><br><span class="line">PowerShellGet requires NuGet provider version <span class="string">&#x27;2.8.5.201&#x27;</span> or newer to interact with Nu<span class="built_in">Get-based</span> repositories. The NuGet</span><br><span class="line"> provider must be available <span class="keyword">in</span> <span class="string">&#x27;C:\Program Files\PackageManagement\ProviderAssemblies&#x27;</span> or</span><br><span class="line"><span class="string">&#x27;C:\Users\guido\AppData\Local\PackageManagement\ProviderAssemblies&#x27;</span>. You can also install the NuGet provider by running</span><br><span class="line"> <span class="string">&#x27;Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force&#x27;</span>. <span class="keyword">Do</span> you want PowerShellGet to install and</span><br><span class="line">import the NuGet provider now?</span><br><span class="line"><span class="function">[<span class="type">Y</span>] <span class="title">Yes</span></span>  <span class="function">[<span class="type">N</span>] <span class="title">No</span></span>  <span class="function">[<span class="type">S</span>] <span class="title">Suspend</span></span>  <span class="function">[?] <span class="title">Help</span></span> (default is <span class="string">&quot;Y&quot;</span>): y</span><br><span class="line"></span><br><span class="line">Untrusted repository</span><br><span class="line">You are installing the modules from an untrusted repository. <span class="keyword">If</span> you trust this repository, change its</span><br><span class="line">InstallationPolicy value by running the <span class="built_in">Set-PSRepository</span> cmdlet. Are you sure you want to install the modules from</span><br><span class="line"><span class="string">&#x27;PSGallery&#x27;</span>?</span><br><span class="line"><span class="function">[<span class="type">Y</span>] <span class="title">Yes</span></span>  <span class="function">[<span class="type">A</span>] <span class="title">Yes</span></span> to All  <span class="function">[<span class="type">N</span>] <span class="title">No</span></span>  <span class="function">[<span class="type">L</span>] <span class="title">No</span></span> to All  <span class="function">[<span class="type">S</span>] <span class="title">Suspend</span></span>  <span class="function">[?] <span class="title">Help</span></span> (default is <span class="string">&quot;N&quot;</span>): y</span><br></pre></td></tr></table></figure>
+
+<p>这里需要修改当前用户的脚本执行策略，将其设置为 <code>RemoteSigned</code>：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Set-ExecutionPolicy</span> <span class="literal">-Scope</span> CurrentUser RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PowerShell 的执行策略有以下几种：</p>
+<ul>
+<li>允许所有脚本: Unrestricted</li>
+<li>允许本地脚本和远程签名脚本: RemoteSigned</li>
+<li>仅允许已签名的脚本: AllSigned</li>
+</ul>
+</blockquote>
+<h2 id="打包自定义镜像"><a href="#打包自定义镜像" class="headerlink" title="打包自定义镜像"></a>打包自定义镜像</h2><p>首先分别导入下载好的两个包：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Add-EsxSoftwareDepot</span> <span class="string">&quot;VMware-ESXi-7.0U3d-19482537-depot.zip&quot;</span></span><br><span class="line"></span><br><span class="line">Depot Url</span><br><span class="line"><span class="literal">---------</span></span><br><span class="line">zip:C:\Software\VMware<span class="literal">-ESXi-7</span>.<span class="number">0</span>U3d<span class="literal">-19482537-depot</span>.zip?index.xml</span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Add-EsxSoftwareDepot</span> <span class="string">&quot;.\Net-Community-Driver_1.2.7.0-1vmw.700.1.0.15843807_19480755.zip&quot;</span></span><br><span class="line"></span><br><span class="line">Depot Url</span><br><span class="line"><span class="literal">---------</span></span><br><span class="line">zip:C:\Software\Net<span class="literal">-Community-Driver_1</span>.<span class="number">2.7</span>.<span class="number">0</span><span class="literal">-1vmw</span>.<span class="number">700.1</span>.<span class="number">0.15843807</span>_19480755.zip?index.xml</span><br></pre></td></tr></table></figure>
+
+<p>列出现有的包，选择一个作为底包并复制一个副本命名为 <code>ESX-NUC</code>，集成社区驱动并导出 iso 镜像：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Get-EsxImageProfile</span></span><br><span class="line"></span><br><span class="line">Name                           Vendor          Last Modified   Acceptance Level</span><br><span class="line"><span class="literal">----</span>                           <span class="literal">------</span>          <span class="literal">-------------</span>   <span class="literal">----------------</span></span><br><span class="line">ESXi<span class="literal">-7</span>.<span class="number">0</span>U3d<span class="literal">-19482537-no-tools</span>  VMware, Inc.    <span class="number">2022</span>/<span class="number">3</span>/<span class="number">11</span> <span class="number">15</span>... PartnerSupported</span><br><span class="line">ESXi<span class="literal">-7</span>.<span class="number">0</span>U3d<span class="literal">-19482537-standard</span>  VMware, Inc.    <span class="number">2022</span>/<span class="number">3</span>/<span class="number">29</span> <span class="number">0</span>:... PartnerSupported</span><br><span class="line">ESXi<span class="literal">-7</span>.<span class="number">0</span>U3sd<span class="literal">-19482531-no-tools</span> VMware, Inc.    <span class="number">2022</span>/<span class="number">3</span>/<span class="number">11</span> <span class="number">13</span>... PartnerSupported</span><br><span class="line">ESXi<span class="literal">-7</span>.<span class="number">0</span>U3sd<span class="literal">-19482531-standard</span> VMware, Inc.    <span class="number">2022</span>/<span class="number">3</span>/<span class="number">29</span> <span class="number">0</span>:... PartnerSupported</span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">New-EsxImageProfile</span> <span class="literal">-CloneProfile</span> <span class="string">&quot;ESXi-7.0U3d-19482537-standard&quot;</span> <span class="literal">-name</span> <span class="string">&quot;ESX-NUC&quot;</span></span><br><span class="line"></span><br><span class="line">位于命令管道位置 <span class="number">1</span> 的 cmdlet <span class="built_in">New-EsxImageProfile</span></span><br><span class="line">请为以下参数提供值:</span><br><span class="line">(请键入 !? 以查看帮助。)</span><br><span class="line">Vendor: whatever</span><br><span class="line"></span><br><span class="line">Name                           Vendor          Last Modified   Acceptance Level</span><br><span class="line"><span class="literal">----</span>                           <span class="literal">------</span>          <span class="literal">-------------</span>   <span class="literal">----------------</span></span><br><span class="line">ESX<span class="literal">-NUC</span>                        whatever        <span class="number">2022</span>/<span class="number">3</span>/<span class="number">29</span> <span class="number">0</span>:... PartnerSupported</span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Add-EsxSoftwarePackage</span> <span class="literal">-ImageProfile</span> <span class="string">&quot;ESX-NUC&quot;</span> <span class="literal">-SoftwarePackage</span> <span class="string">&quot;net-community&quot;</span></span><br><span class="line"></span><br><span class="line">Name                           Vendor          Last Modified   Acceptance Level</span><br><span class="line"><span class="literal">----</span>                           <span class="literal">------</span>          <span class="literal">-------------</span>   <span class="literal">----------------</span></span><br><span class="line">ESX<span class="literal">-NUC</span>                        whatever        <span class="number">2022</span>/<span class="number">5</span>/<span class="number">25</span> <span class="number">23</span>... PartnerSupported</span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\Software&gt; <span class="built_in">Export-ESXImageProfile</span> <span class="literal">-ImageProfile</span> <span class="string">&quot;ESX-NUC&quot;</span> <span class="literal">-ExportToISO</span> <span class="literal">-filepath</span> ESXi<span class="literal">-NUC</span>.iso</span><br></pre></td></tr></table></figure>
+
+<h2 id="制作启动盘并安装-ESXi"><a href="#制作启动盘并安装-ESXi" class="headerlink" title="制作启动盘并安装 ESXi"></a>制作启动盘并安装 ESXi</h2><p>使用 <a target="_blank" rel="noopener" href="https://rufus.ie/zh/">Rufus</a> 工具，选择镜像和 U 盘，其它参数默认，最后写入进 U 盘即可。</p>
+<p>安装过程和安装官方标准镜像一致，插入 U 盘开机时按 F10 选择启动项即可进入安装界面。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>HeJiehui
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://gz-hejiehui.github.io/posts/817315956.html">https://gz-hejiehui.github.io/posts/817315956.html</a>
+        </p>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2022-05-25</p></div> 
+    <div class="post-entry__tags"><a href="/tags/NUC/" class="post-tags__link button"># NUC</a><a href="/tags/ESXi/" class="post-tags__link button"># ESXi</a><a href="/tags/VMware/" class="post-tags__link button"># VMware</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/posts/3630065490.html" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            国区无法下载 Microsoft Remote Desktop 的解决方法
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022 <a href="/">HeJiehui&#39;s Blog</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
