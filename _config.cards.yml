@@ -429,12 +429,12 @@ vendors:
   # Version 1.2
   darkmode: 
     css: 
-    js: https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/darkmode.min.js
+    js: 
   
   # code highlight css
   # https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/
   # Version: 1.2
-  highlight: https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/css/highlight/
+  highlight: 
 
   # highlight.js theme
   # https://cdn.jsdelivr.net/npm/highlight.js@10.1.2/styles/
@@ -455,17 +455,17 @@ vendors:
   # Lazyload js
   # https://github.com/verlok/lazyload
   # Version: 17.1.2
-  lazyload: https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.2/dist/lazyload.min.js
+  lazyload: 
   
   # back_to_top button
   # https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/b2t.min.js
   # Version 1.2
-  back_to_top: https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/b2t.min.js
+  back_to_top: 
 
   # local search plugin
   # https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/local-search.min.js
   # Version 1.2
-  local_search: https://cdn.jsdelivr.net/npm/hexo-theme-cards@1.2/dist/js/local-search.min.js
+  local_search: 
   
   # Valine comments system
   # https://github.com/xcss/Valine/
@@ -523,14 +523,14 @@ vendors:
   # jQuery js
   # https://github.com/jquery/jquery/
   # Version: 3.4.1
-  jquery: https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
+  jquery: 
   
   # fancybox css
   # https://github.com/fancyapps/fancybox/
   # Version: 3.5.7
   fancybox: 
-    css: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css
-    js: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js
+    css: 
+    js: 
 
   # 自定义 script
   custom_script: 
